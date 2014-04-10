@@ -1,0 +1,77 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+echo "131071000"> /proc/sys/net/core/wmem_max
+echo "131071000"> /proc/sys/net/core/wmem_default
+echo "268435456"> /proc/sys/net/core/rmem_max
+echo "268435456"> /proc/sys/net/core/rmem_default
+echo "268435456"> /proc/sys/net/core/netdev_max_backlog
+
+rmmod e1000e
+rmmod igb
+sleep 1
+modprobe e1000e
+sleep 1
+modprobe igb InterruptThrottleRate=16000,16000,16000,16000,16000,16000,16000,16000,16000,16000,16000,16000
+modprobe bonding max_bonds=4  mode=active-backup miimon=100 
+#modprobe bonding
+#fconfig bond0 192.168.11.108 netmask 255.255.255.0 up
+#ifenslave bond0 eth4 eth8
+#ifconfig bond0 192.168.2.18 netmask 255.255.255.0 up
+#ifenslave bond0 eth4 eth8
+
+#ifconfig eth0  129.10.100.222 netmask 255.255.255.0 up
+#ifconfig eth12 192.168.1.200 netmask 255.255.255.0 up
+echo '100'> /proc/sys/net/ipv4/igmp_max_memberships
+echo '100'> /proc/sys/net/ipv4/igmp_max_msf
+sleep 1
+#cd /home/htxk/Desktop/NDS608V4.8.4/ndskern/
+#make
+#cd /home/htxk/Desktop/NDS608V4.8.4/ndsman/
+#./ndsman A </dev/tty1 >/dev/tty1 2>&1
+
+ifconfig eth0 txqueuelen  10000000
+ifconfig eth1 txqueuelen  10000000
+ifconfig eth2 txqueuelen  10000000
+ifconfig eth3 txqueuelen  10000000
+ifconfig eth4 txqueuelen  10000000
+ifconfig eth5 txqueuelen  10000000
+ifconfig eth6 txqueuelen  10000000
+ifconfig eth7 txqueuelen  10000000
+ifconfig eth8 txqueuelen  10000000
+ifconfig eth9 txqueuelen  10000000
+#ifconfig eth10 txqueuelen 10000000
+#ifconfig eth11 txqueuelen 10000000
+#ifconfig eth12 txqueuelen 10000000
+ifconfig bond0 up
+ifconfig bond1 up
+ifconfig bond2 up
+ifconfig bond3 up
+ifenslave bond0 eth2 eth3
+ifenslave bond1 eth4 eth5
+ifenslave bond2 eth6 eth7
+ifenslave bond3 eth8 eth9
+sleep 2
+ifconfig eth0 192.168.8.242
+ifconfig bond0 129.10.2.56
+ifconfig bond1 129.10.2.57
+ifconfig bond2 129.10.2.58
+ifconfig bond3 129.10.2.59
+sleep 1
+
+cd /home/h/nds-rlz-1/ndsman/
+sleep 1
+make
+sleep 1
+
+exit 0
