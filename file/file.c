@@ -19,6 +19,7 @@
 
 #include <linux/module.h>
 #include <linux/init.h>
+#include <linux/moduleparam.h>
 #include "omni_file.h"
 
 
@@ -60,8 +61,13 @@ static int __init _test_file_init(void)
 }
 #endif
 
+char *ptest = 0;
+static int size = 0x100000;
+module_param(size, int, S_IRUGO);
+
 static int __init _test_file_init(void)
 {
+#if 0
 	omni_file_t fd;
 	char buf1[128] = {0};
 	int ret = 0;
@@ -86,7 +92,20 @@ static int __init _test_file_init(void)
 
 	ret = omni_mkdir("/opt/123456", 0777);
 	printk("mkdir /opt/123456 ret=%d\n", ret);
+#else
+	if( size < 0x100000 )
+		size <<= 20;
+	printk("test malloc: 0x%x\n", size);
+	ptest = kmalloc(size, GFP_KERNEL);
+	if( ptest != NULL )
+	{
+		printk("ptest = %p size=0x%x MB\n", ptest, size>>20);
+		kfree(ptest);
+	}
 
+	printk("test over.\n");
+
+#endif
 	return 0;
 }
 

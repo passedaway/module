@@ -1,0 +1,12 @@
+PWD := $(shell pwd)
+obj-m := test.o
+test-objs := file.o
+
+KER_SRC := /lib/modules/$(shell uname -r)/build
+
+default:
+	$(MAKE) -C $(KER_SRC) M=$(PWD) modules
+
+clean:
+	$(MAKE) -C $(KER_SRC) M=$(PWD) clean
+

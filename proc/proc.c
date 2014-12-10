@@ -76,6 +76,7 @@ static int proc_rw_write_proc(struct file *filep, const char *buffer,
     }
 
   //  g_num = atoi(_buf);
+  	g_num = simple_strtol(g_buf, NULL, 0);
 
     PDBG("out\n");
 

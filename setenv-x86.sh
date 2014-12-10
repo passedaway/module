@@ -1,3 +1,3 @@
-export KER_SRC=/usr/src/linux-headers-3.2.0-23-generic
+export KER_SRC=/lib/modules/`uname -r`/build
 export INSTALL_DIR= 
 
